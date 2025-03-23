@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.matrix.nowbar.metrics.Dimensions
+import java.lang.String.format
 
 @Composable
 fun TimerWidget() {
@@ -59,7 +60,7 @@ fun TimerWidget() {
             Spacer(modifier = Modifier.width(15.dp))
 
             Text(
-                "00:${time.intValue}",
+                format("%02d:%02d", time.intValue / 60, time.intValue % 60),
                 color = if (playOrPauseButton.value == R.drawable.ic_pause) Color.White else Color(
                     0xFF6E85B3
                 ),

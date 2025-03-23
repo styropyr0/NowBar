@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,10 +62,18 @@ fun MediaPlayerWidget(music: List<Pair<Int, String>>, innerPadding: PaddingValue
                 .zIndex(0f)
         )
 
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.2f))
+                .zIndex(0.1f)
+        )
+
         Row(
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(PaddingValues.Absolute(30.dp)),
+                .padding(PaddingValues.Absolute(30.dp))
+                .zIndex(0.2f),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = {
@@ -109,16 +118,29 @@ fun MediaPlayerWidget(music: List<Pair<Int, String>>, innerPadding: PaddingValue
             Spacer(modifier = Modifier.size(12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    music[mediaIndex.intValue].second.split("_")[0],
-                    fontSize = 16.sp,
-                    color = Color.White,
-                    lineHeight = 16.sp,
-                    fontWeight = FontWeight.W700,
-                    maxLines = 1,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(3.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painterResource(R.drawable.ic_spotify),
+                        contentDescription = "Spotify",
+                        tint = Color.White,
+                        modifier = Modifier.size(14.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(3.dp))
+
+                    Text(
+                        music[mediaIndex.intValue].second.split("_")[0],
+                        fontSize = 16.sp,
+                        color = Color.White,
+                        lineHeight = 16.sp,
+                        fontWeight = FontWeight.W700,
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(1.dp))
+
                 Text(
                     music[mediaIndex.intValue].second.split("_")[1],
                     fontSize = 10.sp,
