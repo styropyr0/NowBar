@@ -14,6 +14,7 @@ import com.matrix.nowbar.ui.theme.NowBarTheme
 import com.matrix.nowbar.widgets.MediaPlayerWidget
 import com.matrix.nowbar.widgets.NowBarWidget
 import com.matrix.nowbar.widgets.RoutinesWidget
+import com.matrix.nowbar.widgets.SportsWidget
 import com.matrix.nowbar.widgets.TimerWidget
 
 class MainActivity : ComponentActivity() {
@@ -21,20 +22,21 @@ class MainActivity : ComponentActivity() {
     val music = listOf(
         R.drawable.bliever to "Believer_Imagine Dragons",
         R.drawable.sit_next to "Sit Next To Me_Foster The People",
-        R.drawable.dim_aster to "Across Dimming Asterisms_HOYO-MiX"
+        R.drawable.renegade to "Renegade_Axwell /\\ Ingrosso"
     )
 
     val widgets = listOf<@Composable () -> Unit>(
         { MediaPlayerWidget(music, PaddingValues.Absolute(0.dp)) },
-        { TimerWidget() },
-        { RoutinesWidget() },
+        { TimerWidget(seconds = 65) },
+        { RoutinesWidget(content = "At work and 2 others running") },
+        { SportsWidget("ICC Champions Trophy 2025 (Final)\nIND vs NZ", "IND won by 4 wickets") },
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            NowBarTheme {
+            NowBarTheme(darkTheme = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NowBarWidget(innerPadding, widgets)
                 }

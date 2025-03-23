@@ -80,7 +80,7 @@ fun NowBarWidget(innerPadding: PaddingValues, widgets: List<@Composable () -> Un
                                 (if (isTop) offsetY.value else 25f * i * 1.1f).clamp(-400f, 400f)
                         }
                         .fillMaxWidth(0.9f)
-                        .height(70.dp)
+                        .height(80.dp)
                         .scale(
                             when {
                                 isTop -> abs(offsetY.value).mapRange(200f, 0f, 0.9f, 1f)

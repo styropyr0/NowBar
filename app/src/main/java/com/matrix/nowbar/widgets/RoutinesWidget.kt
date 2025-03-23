@@ -28,7 +28,10 @@ import com.matrix.nowbar.R
 import com.matrix.nowbar.metrics.Dimensions
 
 @Composable
-fun RoutinesWidget() {
+fun RoutinesWidget(
+    title: String = "Bixby Routines",
+    content: String
+) {
     var playOrPauseButton = remember { mutableStateOf(R.drawable.ic_pause) }
 
     Box(
@@ -59,7 +62,7 @@ fun RoutinesWidget() {
             Column {
 
                 Text(
-                    "Bixby Routines",
+                    title,
                     color = Color(0xFF6E85B3),
                     fontSize = 11.sp,
                     lineHeight = 11.sp,
@@ -67,7 +70,7 @@ fun RoutinesWidget() {
                 )
 
                 Text(
-                    "At work and 2 others running",
+                    content,
                     color = if (playOrPauseButton.value == R.drawable.ic_pause) Color.White else Color(
                         0xFF6E85B3
                     ),

@@ -1,5 +1,6 @@
 package com.matrix.nowbar.widgets
 
+import androidx.compose.animation.animateColorAsState
 import com.matrix.nowbar.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,12 +29,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.matrix.nowbar.metrics.Dimensions
 import java.lang.String.format
+import kotlin.math.abs
 
 @Composable
-fun TimerWidget() {
+fun TimerWidget(seconds: Int) {
 
     var playOrPauseButton = remember { mutableStateOf(R.drawable.ic_pause) }
-    var time = remember { mutableIntStateOf(17) }
+    var time = remember { mutableIntStateOf(seconds) }
+    var isRunning = remember { mutableStateOf(true) }
+
+    androidx.compose.runtime.LaunchedEffect(isRunning.value) {
+        while (isRunning.value) {
+            kotlinx.coroutines.delay(1000L)
+            time.intValue -= 1
+        }
+    }
+
+    val animatedColor = animateColorAsState(
+        targetValue = if (isRunning.value && time.intValue >= 0) Color.White
+        else if (time.intValue < 0) Color(0xFFFF4800)
+        else Color(0xFFAF88DA),
+        label = "Timer Color Transition"
+    )
 
     Box(
         modifier = Modifier
@@ -41,7 +58,7 @@ fun TimerWidget() {
             .background(Color(0xFF503164))
             .clip(RoundedCornerShape(Dimensions.BorderRadius)),
     ) {
-
+        playOrPauseButton.value = if (isRunning.value) R.drawable.ic_pause else R.drawable.ic_play
         Row(
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -51,45 +68,47 @@ fun TimerWidget() {
             Icon(
                 painterResource(R.drawable.ic_timer_running),
                 contentDescription = "Play/Pause",
-                tint = if (playOrPauseButton.value == R.drawable.ic_pause) Color.White else Color(
-                    0xFF6E85B3
-                ),
+                tint = animatedColor.value,
                 modifier = Modifier.size(40.dp)
             )
 
             Spacer(modifier = Modifier.width(15.dp))
 
             Text(
-                format("%02d:%02d", time.intValue / 60, time.intValue % 60),
-                color = if (playOrPauseButton.value == R.drawable.ic_pause) Color.White else Color(
-                    0xFF6E85B3
+                format(
+                    "${if (time.intValue < 0) "-" else ""}%02d:%02d",
+                    abs(time.intValue / 60),
+                    abs(time.intValue % 60)
                 ),
+                color = animatedColor.value,
                 fontSize = 28.sp,
                 lineHeight = 28.sp,
                 fontWeight = FontWeight.W700,
                 modifier = Modifier.weight(1f)
             )
 
-            IconButton(onClick = {
-                playOrPauseButton.value =
-                    if (playOrPauseButton.value == R.drawable.ic_pause) R.drawable.ic_play
-                    else R.drawable.ic_pause
-            }) {
-                Icon(
-                    painterResource(playOrPauseButton.value),
-                    contentDescription = "Start / Stop Timer",
-                    tint = Color.White,
-                    modifier = Modifier.size(25.dp)
-                )
-            }
+            if (time.intValue >= 0)
+                IconButton(onClick = {
+                    isRunning.value = !isRunning.value
+                }) {
+                    Icon(
+                        painterResource(playOrPauseButton.value),
+                        contentDescription = "Start / Stop Timer",
+                        tint = Color.White,
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
 
             Spacer(modifier = Modifier.width(10.dp))
 
-            IconButton(onClick = { time.intValue = 0 }) {
+            IconButton(onClick = {
+                time.intValue = seconds
+                isRunning.value = false
+            }) {
                 Icon(
                     painterResource(R.drawable.ic_stop),
                     contentDescription = "Close Timer",
-                    tint = Color.White,
+                    tint = Color.Red,
                     modifier = Modifier.size(30.dp)
                 )
             }
