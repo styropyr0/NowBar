@@ -1,1 +1,1 @@
-# Making Samsung's Now Bar using Kotlin Jetpack
+# Samsung's Now Bar using Kotlin Jetpack
